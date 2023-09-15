@@ -189,6 +189,10 @@ const BetterMultiSelect = (props: Props) => {
 
     const [flagOn, setFlagOn] = useState(flagOnInitial);
 
+    useDidUpdate(() => {
+        setFlagOn(flagOnInitial);
+    }, [flagOnInitial]);
+
     const mapLabelsToValues = (
         labels: string[],
         labelToValueMap = optionsHandlerRef.current.labelToValue
