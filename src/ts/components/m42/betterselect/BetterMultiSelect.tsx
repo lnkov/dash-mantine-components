@@ -35,6 +35,9 @@ type Props = {
     flagLabel?: string;
     flagOn?: boolean;
     dataValuesAvailable?: ArrayValueType;
+    /** Используется для того, чтобы триггерить коллбэки
+     * не на каждый клик по опциям, а только при закрытии */
+    dropdownClosedTimes?: number;
 } & PersistenceProps &
     DefaultProps &
     Omit<SelectSharedProps, "creatable" | "searchValue" | "data">;
@@ -146,6 +149,7 @@ const BetterMultiSelect = (props: Props) => {
         flagLabel,
         searchable,
         dataValuesAvailable,
+        dropdownClosedTimes = 0,
         ...other
     } = props;
 
@@ -253,9 +257,14 @@ const BetterMultiSelect = (props: Props) => {
         setProps({ flagOn: !flagOn });
     };
 
+    const handleDropdownClose = () => {
+        setProps({ dropdownClosedTimes: dropdownClosedTimes + 1 });
+    };
+
     return (
         <MantineMultiSelect
             onChange={handleValueChange}
+            onDropdownClose={handleDropdownClose}
             getCreateLabel={(query) => `+ Create ${query}`}
             data={shouldAddAllItem(
                 options,
